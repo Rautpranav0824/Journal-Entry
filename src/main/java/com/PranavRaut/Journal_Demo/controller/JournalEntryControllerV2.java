@@ -4,13 +4,12 @@ import com.PranavRaut.Journal_Demo.entity.JournalEntry;
 import com.PranavRaut.Journal_Demo.service.JournalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/journal")
@@ -26,23 +25,34 @@ public class JournalEntryControllerV2 {
     }
 
     @PostMapping // localhost:8080/journal POST hoga toh yha aayega
-    public JournalEntry createEntry (@RequestBody JournalEntry myEntry){
-        myEntry.setDate(LocalDateTime.now());
-        journalEntryService.saveEntry(myEntry);
-        return myEntry;
+    public ResponseEntity<JournalEntry> createEntry (@RequestBody JournalEntry myEntry){
+        try {
+            myEntry.setDate(LocalDateTime.now());
+            journalEntryService.saveEntry(myEntry);
+            return new  ResponseEntity<>(myEntry , HttpStatus.CREATED);
+        }catch (Exception e){
+            return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/id/{myId}")
-    public JournalEntry getjournalentry (@PathVariable("myId") ObjectId myId){
-        return journalEntryService.findbyId(myId).orElse(null);
+    public ResponseEntity<?> getjournalentry (@PathVariable("myId") ObjectId myId){
+        Optional<JournalEntry> journalentry = journalEntryService.findbyId(myId);
+        if(journalentry.isPresent()){
+            return new ResponseEntity<>(journalentry.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/id/{myId}")
-    public String deletejournalentry (@PathVariable("myId") ObjectId myId){
+    public ResponseEntity<?> deletejournalentry (@PathVariable("myId") ObjectId myId){
         journalEntryService.deletebyId(myId);
-        return "The entry has been removed";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
+        // put is remaning to have changes
     @PutMapping("/id/{myId}")
     public String editjournalentry (@PathVariable("myId") Long myId , @RequestBody JournalEntry myEntry){
 
