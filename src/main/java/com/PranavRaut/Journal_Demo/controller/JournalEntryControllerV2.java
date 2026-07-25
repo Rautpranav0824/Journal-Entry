@@ -23,8 +23,12 @@ public class JournalEntryControllerV2 {
     private MongoTemplate mongoTemplate; // Moved field injection to top level for cleaner code
 
     @GetMapping
-    public List<JournalEntry> getall () {
-        return journalEntryService.getAll();
+    public ResponseEntity<?> getall () {
+        List<JournalEntry> all = journalEntryService.getAll();
+        if (all != null && !all.isEmpty()){
+            return new ResponseEntity<>(all,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -54,8 +58,17 @@ public class JournalEntryControllerV2 {
     }
 
     @PutMapping("/id/{myId}")
-    public String editjournalentry (@PathVariable("myId") Long myId, @RequestBody JournalEntry myEntry) {
-        return "The changes are made in ID : " + myId + " Successfully";
+    public ResponseEntity<?> editjournalentry (@PathVariable("myId") ObjectId myId, @RequestBody JournalEntry newEntry) {
+         JournalEntry oldEntry = journalEntryService.findbyId(myId).orElse(null);
+            if(oldEntry != null){
+                oldEntry.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle() : oldEntry.getTitle());
+                oldEntry.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent() : oldEntry.getContent());
+
+                journalEntryService.saveEntry(oldEntry);
+                return new ResponseEntity<>(oldEntry,HttpStatus.OK);
+            }
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     // Endpoint to verify active MongoDB database name
