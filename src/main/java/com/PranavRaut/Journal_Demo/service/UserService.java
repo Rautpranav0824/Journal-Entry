@@ -33,6 +33,10 @@ public class UserService {
         userRepo.deleteById(id);
     }
 
+    public User findByUserName(String userName){
+        return userRepo.findByUserName(userName);
+    }
+
 }
 
 // Controller --> Service(business logic) --> Repository
