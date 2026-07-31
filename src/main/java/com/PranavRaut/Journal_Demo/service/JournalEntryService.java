@@ -1,10 +1,12 @@
 package com.PranavRaut.Journal_Demo.service;
 
 import com.PranavRaut.Journal_Demo.entity.JournalEntry;
+import com.PranavRaut.Journal_Demo.entity.User;
 import com.PranavRaut.Journal_Demo.repository.JournalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,18 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepo ;
 
-    public void saveEntry (JournalEntry journalEntry){
+    @Autowired
+    private UserService userService;
+
+    @Transactional
+    public void saveEntry (JournalEntry journalEntry, String username){
+        User user = userService.findByUserName(username);
+        JournalEntry saved = journalEntryRepo.save(journalEntry);
+        user.getJournalEntries().add(saved);
+        userService.saveEntry(user);
+    }
+
+    public void saveEntry (JournalEntry journalEntry ){
         journalEntryRepo.save(journalEntry);
     }
 
@@ -33,7 +46,10 @@ public class JournalEntryService {
 
     // delete by id
 
-    public void deletebyId (ObjectId id){
+    public void deletebyId (ObjectId id, String username){
+        User user = userService.findByUserName(username);
+        user.getJournalEntries().removeIf( x -> x.getId().equals(id) );
+        userService.saveEntry(user);
         journalEntryRepo.deleteById(id);
     }
 
