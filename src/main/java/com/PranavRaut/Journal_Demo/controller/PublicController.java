@@ -25,7 +25,7 @@ public class PublicController {
     public ResponseEntity<?> createuser (@RequestBody User user){
         try {
 
-            userService.saveEntry(user);
+            userService.saveNewUser(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
         catch (Exception e) {
