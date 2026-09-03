@@ -9,10 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data // ye lombok ka annotation hai , basically ye khud getters , setters , etc generate kr deta hai compile time ke vakt
 @Document(collection = "journal_entries")
-@JsonPropertyOrder({"id", "title", "content"})
+@JsonPropertyOrder({"id", "title", "content", "date", "mood", "summary", "tags"})
 public class JournalEntry {
 
     @Id
@@ -24,6 +25,12 @@ public class JournalEntry {
     private String content ;
 
     private LocalDateTime date;
+
+    private String mood;
+
+    private String summary;
+
+    private List<String> tags;
 
 //   public LocalDateTime getDate() {
 //        return date;

@@ -39,6 +39,7 @@ public class AIService {
                         .maxOutputTokens(500)
                         .build()
         );
+        System.out.println("AI RESPONSE: " + response);
 
         String jsonResponse = response.output().stream()
                 .flatMap(item -> item.message().stream())
