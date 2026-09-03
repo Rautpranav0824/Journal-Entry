@@ -21,14 +21,25 @@ import java.util.stream.Collectors;
 @RequestMapping("/journal")
 public class JournalEntryControllerV2 {
 
-    @Autowired
-    private JournalEntryService journalEntryService;
 
-    @Autowired
-    private UserService userService;
+    //private JournalEntryService journalEntryService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate; //  field injection to top level for cleaner code
+
+    //private UserService userService;
+
+
+    //private MongoTemplate mongoTemplate; //  field injection to top level for cleaner code
+
+    //Constructor Injection
+    public final JournalEntryService journalEntryService;
+    public final UserService userService;
+    public final MongoTemplate mongoTemplate;
+
+    public JournalEntryControllerV2 (JournalEntryService journalEntryService , UserService userService , MongoTemplate mongoTemplate){
+        this.journalEntryService = journalEntryService;
+        this.userService = userService;
+        this.mongoTemplate = mongoTemplate;
+    }
 
     @GetMapping("/entries")
     public ResponseEntity<?> getall () {

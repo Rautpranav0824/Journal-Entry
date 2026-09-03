@@ -1,7 +1,0 @@
-
-spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://pranavrautdev_db_user:pranav1_xd@cluster007.qy9iltj.mongodb.net/?appName=Cluster007
-      database: Journaldb
-      auto-index-creation: true
