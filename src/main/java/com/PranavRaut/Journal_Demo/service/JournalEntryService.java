@@ -25,24 +25,27 @@ public class JournalEntryService {
     private AIService aiService;
 
     @Transactional
-    public void saveEntry (JournalEntry journalEntry, String username){
+    public void saveEntry(JournalEntry journalEntry, String username) {
+
         User user = userService.findByUserName(username);
+
         JournalEntry saved = journalEntryRepo.save(journalEntry);
+
         try {
             AIAnalysis analysis = aiService.analyzeEntry(saved.getContent());
 
-            //  Store AI results in the journal entry
-            saved.setMood(analysis.getMood());
-            saved.setSummary(analysis.getSummary());
-            saved.setTags(analysis.getTags());
+            if (analysis != null) {
+                saved.setMood(analysis.getMood());
+                saved.setSummary(analysis.getSummary());
+                saved.setTags(analysis.getTags());
 
-            //  Save the updated entry
-            journalEntryRepo.save(saved);
+                journalEntryRepo.save(saved);
+            }
 
         } catch (Exception e) {
-            // AI failure should NOT prevent journal creation
             System.out.println("AI analysis failed: " + e.getMessage());
         }
+
         user.getJournalEntries().add(saved);
         userService.saveUser(user);
     }
