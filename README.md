@@ -1,6 +1,6 @@
 # Journal Entry API 📔
 
-A Spring Boot REST API for personal journal entry management, with MongoDB persistence and Spring Security-based authentication.
+A Spring Boot REST API for personal journal entry management, with MongoDB persistence, JWT-based authentication, and optional AI-powered journal analysis.
 
 ## Tech Stack
 
@@ -8,21 +8,26 @@ A Spring Boot REST API for personal journal entry management, with MongoDB persi
 |-------|------------|
 | Language | Java 21 |
 | Framework | Spring Boot 3 |
-| Security | Spring Security (HTTP Basic Auth, BCrypt) |
+| Security | Spring Security + JWT + BCrypt |
 | Database | MongoDB Atlas |
 | Build Tool | Maven |
+| AI | OpenAI API via OpenRouter |
 | Utilities | Lombok |
 
 ---
 
 ## Features
+
 - User signup
-- User update (authenticated)
-- Create journal entries (per user)
-- Get all entries for a user
+- JWT-based authentication
+- BCrypt password hashing
+- User-specific journal entries
+- Create journal entries
+- Get all entries for the authenticated user
 - Get entry by ID
-- Update entry
-- Delete entry
+- Update journal entries
+- Delete journal entries
+- Optional AI-powered journal analysis
 - Health check endpoint
 
 ---
@@ -33,52 +38,22 @@ A Spring Boot REST API for personal journal entry management, with MongoDB persi
 |--------|----------------|
 | `controller` | REST endpoints |
 | `service` | Business logic |
-| `repository` | Database layer (Spring Data MongoDB) |
+| `repository` | Database access |
 | `entity` | Data models |
-| `config` | Spring Security configuration |
+| `config` | Spring Security and JWT configuration |
 
 ---
 
-## API Endpoints
+## Authentication Flow
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/health-check` | Public | Health check |
-| POST | `/create-user` | Public | Register a new user |
-| PUT | `/user` | Authenticated | Update the logged-in user's details |
-| GET | `/journal/{username}` | Authenticated | Get all entries for a user |
-| POST | `/journal/{username}` | Authenticated | Create a new entry for a user |
-| GET | `/journal/id/{id}` | Authenticated | Get entry by ID |
-| PUT | `/journal/id/{username}/{id}` | Authenticated | Update entry by ID |
-| DELETE | `/journal/id/{username}/{id}` | Authenticated | Delete entry by ID |
+The API uses **stateless JWT authentication**.
 
-Authentication uses HTTP Basic — send credentials as `username:password` in the `Authorization` header.
+1. Register a user.
+2. Login using the user's credentials.
+3. The login endpoint returns a JWT.
+4. Include the JWT as a Bearer token when accessing protected endpoints.
 
----
+Example:
 
-## Getting Started
-
-1. Clone the repo and add your own `src/main/resources/application.properties` (not committed — see `.gitignore`) with your MongoDB URI:
-   ```properties
-   spring.data.mongodb.uri=<your-mongodb-uri>
-   spring.data.mongodb.database=Journaldb
-   ```
-2. Run with `./mvnw spring-boot:run`
-3. Hit `/health-check` to confirm the app is up.
-
----
-
-## Known Limitations / Roadmap
-
-This is an active learning project — the core CRUD + auth flow works, but a few things are still being hardened:
-
-- **Authorization tightening**: endpoints currently trust the `username` path variable rather than deriving it from the authenticated session; moving this to `SecurityContextHolder`-based checks.
-- **DTO layer**: request/response bodies currently map directly to entities; adding DTOs to control exactly what's exposed in API responses.
-- **JWT migration**: moving from HTTP Basic to stateless JWT-based auth.
-- **Validation**: adding Bean Validation (`@Valid`, `@NotBlank`, etc.) on incoming requests.
-- **Tests**: expanding beyond the default Spring context test to real unit/integration coverage.
-
----
-
-## License
-Personal learning project.
+```text
+Authorization: Bearer <your-jwt-token>
