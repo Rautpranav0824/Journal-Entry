@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,16 +23,25 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PutMapping()
     public ResponseEntity<?> updateUser (@RequestBody User user  ){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
 
-            userInDb.setUserName(user.getUserName());
-            userInDb.setPassword(user.getPassword());
-            userService.saveNewUser(userInDb);
-            return new ResponseEntity<>(HttpStatus.OK);
+        userInDb.setUserName(user.getUserName());
+
+        // Only touch the password if the client actually sent a new one
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            userInDb.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        // saveUser() persists as-is — it does NOT touch roles, unlike saveNewUser()
+        userService.saveUser(userInDb);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

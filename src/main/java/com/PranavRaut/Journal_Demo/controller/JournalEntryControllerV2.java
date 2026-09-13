@@ -100,21 +100,20 @@ public class JournalEntryControllerV2 {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByUserName(username);
-        List <JournalEntry> collect = user.getJournalEntries().stream().filter(x -> x.getId().equals(myId)).collect(Collectors.toList());
-        if(!collect.isEmpty()){
+        List<JournalEntry> collect = user.getJournalEntries().stream().filter(x -> x.getId().equals(myId)).collect(Collectors.toList());
+        if (!collect.isEmpty()) {
             Optional<JournalEntry> journalEntry = journalEntryService.findbyId(myId);
-            if(journalEntry != null){
+            if (journalEntry.isPresent()) {
                 JournalEntry old = journalEntry.get();
                 old.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle() : old.getTitle());
                 old.setContent(newEntry.getContent() != null && !newEntry.getContent().equals("") ? newEntry.getContent() : old.getContent());
 
                 journalEntryService.saveEntry(old);
-                return new ResponseEntity<>(old,HttpStatus.OK);
+                return new ResponseEntity<>(old, HttpStatus.OK);
             }
-
         }
 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     // Endpoint to verify active MongoDB database name
