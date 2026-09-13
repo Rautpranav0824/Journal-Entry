@@ -1,0 +1,343 @@
+/* ---- Design tokens ---- */
+:root {
+  --bg: #ede3d0;
+  --surface: #e4d7be;
+  --border: #c9b896;
+  --text: #2a2118;
+  --text-muted: #7a6c56;
+  --accent: #3f5e46;
+  --accent-hover: #4e7256;
+  --accent-ink: #f7f1e4;
+  --danger: #8c3b2e;
+  --rule: rgba(42, 33, 24, 0.08);
+  --margin-rule: rgba(140, 59, 46, 0.4);
+
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- Layout shells ---- */
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem 3.75rem;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 2.75rem,
+      var(--margin-rule) 2.75rem,
+      var(--margin-rule) calc(2.75rem + 1px),
+      transparent calc(2.75rem + 1px)
+    );
+  background-size: 100% 2rem, 100% 100%;
+  background-position: 0 0.4rem, 0 0;
+}
+
+.centered-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1.5rem 1.5rem 4rem;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 2.75rem,
+      var(--margin-rule) 2.75rem,
+      var(--margin-rule) calc(2.75rem + 1px),
+      transparent calc(2.75rem + 1px)
+    );
+  background-size: 100% 2rem, 100% 100%;
+  background-position: 0 0.4rem, 0 0;
+}
+
+/* ---- Nav ---- */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 4px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  padding: 0.4rem 0.6rem;
+}
+
+.btn-danger:hover {
+  text-decoration: underline;
+}
+
+/* ---- Forms (auth pages) ---- */
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+}
+
+.auth-card h1 {
+  font-size: 1.9rem;
+  margin-bottom: 0.35rem;
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.field input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0.1rem;
+  color: var(--text);
+}
+
+.field input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.form-error {
+  background: rgba(140, 59, 46, 0.1);
+  border: 1px solid rgba(140, 59, 46, 0.35);
+  color: #6e2e23;
+  padding: 0.7rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-switch {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ---- Journal list ---- */
+.list-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.entry-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.entry-row:first-child {
+  padding-top: 0;
+}
+
+.entry-date {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.entry-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  margin-bottom: 0.3rem;
+}
+
+.entry-preview {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 55ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  padding: 3rem 0;
+  text-align: center;
+}
+
+/* ---- Editor ---- */
+.editor-title-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.editor-title-input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.editor-content-input {
+  width: 100%;
+  min-height: 40vh;
+  background: transparent;
+  border: none;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.editor-content-input:focus-visible {
+  outline: none;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.status-text {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
