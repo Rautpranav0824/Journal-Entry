@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createEntry, deleteEntry, getEntry, updateEntry } from "../api/journal";
+import { createEntry, getEntry, updateEntry } from "../api/journal";
 
 export default function JournalEditorPage() {
   const { id } = useParams();
@@ -30,10 +30,11 @@ export default function JournalEditorPage() {
     try {
       if (isEditing) {
         await updateEntry(id, title, content);
+        navigate(`/entries/${id}`);
       } else {
-        await createEntry(title, content);
+        const created = await createEntry(title, content);
+        navigate(created?.id ? `/entries/${created.id}` : "/entries");
       }
-      navigate("/");
     } catch (err) {
       setError("Couldn't save this entry. Try again.");
     } finally {
@@ -41,13 +42,11 @@ export default function JournalEditorPage() {
     }
   }
 
-  async function handleDelete() {
-    if (!window.confirm("Delete this entry? This can't be undone.")) return;
-    try {
-      await deleteEntry(id);
+  function handleCancel() {
+    if (isEditing) {
+      navigate(`/entries/${id}`);
+    } else {
       navigate("/");
-    } catch (err) {
-      setError("Couldn't delete this entry.");
     }
   }
 
@@ -78,21 +77,12 @@ export default function JournalEditorPage() {
       />
 
       <div className="editor-actions">
-        <div>
-          {isEditing && (
-            <button className="btn btn-danger" onClick={handleDelete}>
-              Delete entry
-            </button>
-          )}
-        </div>
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <button className="btn btn-ghost" onClick={() => navigate("/")}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={handleSave} disabled={saving || !title.trim()}>
-            {saving ? "Saving…" : "Save entry"}
-          </button>
-        </div>
+        <button className="btn btn-ghost" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button className="btn btn-primary" onClick={handleSave} disabled={saving || !title.trim()}>
+          {saving ? "Saving…" : "Save entry"}
+        </button>
       </div>
     </div>
   );

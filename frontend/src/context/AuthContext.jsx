@@ -5,11 +5,14 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [username, setUsername] = useState(() => localStorage.getItem("username"));
 
   async function login(userName, password) {
     const jwt = await loginRequest(userName, password);
     localStorage.setItem("token", jwt);
+    localStorage.setItem("username", userName);
     setToken(jwt);
+    setUsername(userName);
   }
 
   async function signup(userName, password) {
@@ -21,11 +24,14 @@ export function AuthProvider({ children }) {
 
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     setToken(null);
+    setUsername(null);
   }
 
   const value = {
     isAuthenticated: Boolean(token),
+    username,
     login,
     signup,
     logout,
