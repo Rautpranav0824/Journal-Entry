@@ -6,9 +6,10 @@ export async function signup(userName, password) {
   return response.data;
 }
 
-// POST /public/login — backend returns the JWT as a plain string body,
-// not a JSON object, so we just hand back response.data as-is.
+// POST /public/login — the deployed backend currently returns a JSON
+// object like { "token": "..." }, not a bare string, so pull the token
+// field out explicitly instead of assuming response.data IS the token.
 export async function login(userName, password) {
   const response = await client.post("/public/login", { userName, password });
-  return response.data;
+  return response.data.token;
 }
