@@ -1,8 +1,13 @@
 # Journal Entry API 
 
-📔A full-stack personal journal application built with Spring Boot, MongoDB, JWT authentication, and React. The application provides authenticated users with private journal management and AI-powered analysis of journal entries.
+
+A full-stack personal journal application built with Spring Boot, MongoDB, JWT authentication, and React. The application provides authenticated users with private journal management and AI-powered analysis of journal entries.
+
+
 Development Focus: The frontend UI was AI-generated and was used primarily as a presentation layer. My primary focus in this project was backend development, including REST API design, Spring Boot architecture, JWT authentication, Spring Security, MongoDB persistence, authorization, validation, exception handling, and AI API integration.
 The backend exposes a REST API with stateless JWT authentication, user-specific data access, role-based admin endpoints, centralized exception handling, and MongoDB persistence.
+
+
 ---
 
 ## ✨ Features
