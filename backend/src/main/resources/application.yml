@@ -1,0 +1,17 @@
+
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE:Journaldb}
+      auto-index-creation: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+server:
+  port: ${PORT:8080}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
